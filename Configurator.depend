@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1604044453 source:e:\energysaving\configurator\main.cpp
+1604044619 source:e:\energysaving\configurator\main.cpp
 	<tchar.h>
 	<windows.h>
 	<string>
+	<algorithm>
 
 1604043148 e:\energysaving\configurator\menu.h
 

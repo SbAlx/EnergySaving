@@ -7,6 +7,7 @@
 #include <tchar.h>
 #include <windows.h>
 #include <string>
+#include <algorithm>
 
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
