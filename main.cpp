@@ -7,7 +7,8 @@
 #include <tchar.h>
 #include <windows.h>
 #include <string>
-#include <algorithm>
+//#include <algorithm>
+#include <commctrl.h>
 
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
@@ -15,6 +16,13 @@ LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 /*  Make the class name into a global variable  */
 TCHAR szClassName[ ] = _T("CodeBlocksWindowsApp");
 std::string szAppName = _T("Настройка данных");
+
+HWND hwndToolBar = NULL;
+DWORD dwToolBarStyles;// = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS |CCS_TOP | CCS_NODIVIDER | TBSTYLE_TOOLTIPS;
+
+#define IDM_FILE_NEW 100 // -- Menu Commands --
+#define IDM_FILE_OPEN 101
+#define IDM_FILE_SAVE 102
 
 int WINAPI WinMain (HINSTANCE hThisInstance,
                      HINSTANCE hPrevInstance,
@@ -80,11 +88,34 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 
 
 /*  This function is called by the Windows function DispatchMessage()  */
+UINT uiBitmap;
+TBBUTTON tbb[] =
+{
+    STD_FILENEW, IDM_FILE_NEW, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 0, 0,
+    STD_FILEOPEN, IDM_FILE_OPEN, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 0, 1,
+    STD_FILESAVE, IDM_FILE_SAVE, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0, 0, 2,
+};
 
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    dwToolBarStyles = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS |CCS_TOP | CCS_NODIVIDER | TBSTYLE_TOOLTIPS;
+    LPTBBUTTON ptbb;
+    ptbb = &tbb[0];
+
     switch (message)                  /* handle the messages */
     {
+    case WM_CREATE:
+        hwndToolBar = CreateToolbarEx(  hwnd,
+                                        dwToolBarStyles,
+                                        1,
+                                        15,
+                                        HINST_COMMCTRL,
+                                        IDB_STD_SMALL_COLOR,
+                                        ptbb,
+                                        3,
+                                        0, 0, 0, 0,
+                                        sizeof(TBBUTTON));
+        break;
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
