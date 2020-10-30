@@ -8,13 +8,18 @@
 #include <windows.h>
 #include <string>
 #include <algorithm>
+#include <stdlib.h>
 
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK ChildWindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
 /*  Make the class name into a global variable  */
 TCHAR szClassName[ ] = _T("CodeBlocksWindowsApp");
 std::string szAppName = _T("Настройка данных");
+
+HINSTANCE g_hInst;
+ HWND hwndChild;
 
 int WINAPI WinMain (HINSTANCE hThisInstance,
                      HINSTANCE hPrevInstance,
@@ -22,8 +27,10 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
                      int nCmdShow)
 {
     HWND hwnd;               /* This is the handle for our window */
+
     MSG messages;            /* Here messages to the application are saved */
     WNDCLASSEX wincl;        /* Data structure for the windowclass */
+    g_hInst = hThisInstance;
 
     /* The Window structure */
     wincl.hInstance = hThisInstance;
@@ -43,6 +50,13 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
     wincl.hbrBackground = (HBRUSH) COLOR_BACKGROUND;
 
     /* Register the window class, and if it fails quit the program */
+    if (!RegisterClassEx (&wincl))
+        return 0;
+
+    wincl.lpszClassName = _T("CHILD_WINDOW");
+    wincl.lpfnWndProc = ChildWindowProcedure;      /* This function is called by windows */
+
+     /* Register the window class, and if it fails quit the program */
     if (!RegisterClassEx (&wincl))
         return 0;
 
@@ -83,6 +97,49 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
 
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    static HWND hwndClient;
+    CLIENTCREATESTRUCT clientcreate;
+    MDICREATESTRUCT mdicreate;
+    switch (message)                  /* handle the messages */
+    {
+    case WM_CREATE:
+        //clientcreate.hWindowMenu = hMenuInitWindow;
+        clientcreate.idFirstChild = 100;
+        hwndClient = CreateWindow("MDICLIENT",
+                                  NULL,
+                                  WS_CHILD | WS_CLIPCHILDREN | WS_VISIBLE,
+                                  0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN),
+                                  hwnd,
+                                  (HMENU) 1,
+                                  g_hInst,
+                                  (LPSTR) &clientcreate);
+
+        mdicreate.szClass = _T("CHILD_WINDOW");
+        mdicreate.szTitle = "Hello";
+        mdicreate.hOwner = g_hInst;
+        mdicreate.x = CW_USEDEFAULT;
+        mdicreate.y = CW_USEDEFAULT;
+        mdicreate.cx = CW_USEDEFAULT;
+        mdicreate.cy = CW_USEDEFAULT;
+        mdicreate.style = 0;
+        mdicreate.lParam = 0;
+        hwndChild =(HWND) SendMessage(  hwndClient,
+                                        WM_MDICREATE,
+                                        0,
+                                        (LPARAM)(LPMDICREATESTRUCT) &mdicreate);
+        break;
+        case WM_DESTROY:
+            PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
+            break;
+        default:                      /* for messages that we don't deal with */
+            return DefWindowProc (hwnd, message, wParam, lParam);
+    }
+
+    return 0;
+}
+
+LRESULT CALLBACK ChildWindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
@@ -94,3 +151,4 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
     return 0;
 }
+
