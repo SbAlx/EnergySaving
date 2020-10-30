@@ -1,13 +1,16 @@
 # depslib dependency file v1.0
-1604057093 source:e:\energysaving\configurator\main.cpp
+1604059124 source:e:\energysaving\configurator\main.cpp
 	<tchar.h>
 	<windows.h>
 	<string>
 	<algorithm>
 	<stdlib.h>
+	<commctrl.h>
 
 1604043148 e:\energysaving\configurator\menu.h
 
 1604043357 source:e:\energysaving\configurator\res\menu.rc
 	"..\menu.h"
+
+1602782921 source:e:\energysaving\configurator\res\prop.rc
 

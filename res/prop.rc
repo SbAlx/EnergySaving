@@ -1,0 +1,3 @@
+//#include "Resource.h"
+
+IDB_PROPRES BITMAP "properties_hc1.bmp"
