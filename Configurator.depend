@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1604047596 source:e:\energysaving\configurator\main.cpp
+1604048407 source:e:\energysaving\configurator\main.cpp
 	<tchar.h>
 	<windows.h>
 	<string>
