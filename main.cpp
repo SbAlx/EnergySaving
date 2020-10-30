@@ -7,6 +7,7 @@
 #include <tchar.h>
 #include <windows.h>
 #include <string>
+#include <commctrl.h>
 #include <algorithm>
 
 /*  Declare Windows procedure  */
@@ -15,6 +16,10 @@ LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
 /*  Make the class name into a global variable  */
 TCHAR szClassName[ ] = _T("CodeBlocksWindowsApp");
 std::string szAppName = _T("Настройка данных");
+
+HWND hwndStatusBar = NULL;
+DWORD dwStatusBarStyles = WS_CHILD | WS_VISIBLE |WS_CLIPSIBLINGS | CCS_BOTTOM |SBARS_SIZEGRIP;
+
 
 int WINAPI WinMain (HINSTANCE hThisInstance,
                      HINSTANCE hPrevInstance,
@@ -85,6 +90,12 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 {
     switch (message)                  /* handle the messages */
     {
+    case WM_CREATE:
+        hwndStatusBar = CreateStatusWindow(dwStatusBarStyles,
+                                    "Ready",
+                                    hwnd,
+                                    2);
+        break;
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
