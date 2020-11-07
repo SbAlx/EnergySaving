@@ -11,6 +11,10 @@
 #include <stdlib.h>
 #include <commctrl.h>
 
+#include "DataHierarhy.h"
+
+
+
 class Confighierarhy
 {
 public:
@@ -170,6 +174,8 @@ int WINAPI WinMain (HINSTANCE hThisInstance,
            NULL                 /* No Window Creation data */
            );
 
+    InitCommonControls();
+
     /* Make the window visible on the screen */
     ShowWindow (hwnd, nCmdShow);
 
@@ -211,7 +217,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
     // Ensure that the common control DLL is loaded.
     InitCommonControls();
 
-
+    static DataHierarhy& Hierarhy = DataHierarhy::instance();
     static HWND hwndClient;
     CLIENTCREATESTRUCT clientcreate;
     MDICREATESTRUCT mdicreate;
@@ -242,9 +248,11 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                         WM_MDICREATE,
                                         0,
                                         (LPARAM)(LPMDICREATESTRUCT) &mdicreate);
+        Hierarhy.Set(hwndChild, g_hInst);
 
-         GetClientRect(hwndChild, &rcClient);
-         //GetClientRect(hwnd,&rcClient);
+        /*
+        GetClientRect(hwndChild, &rcClient);
+        //GetClientRect(hwnd,&rcClient);
         g_hwndTreeview =  CreateWindowEx(0,
                             WC_TREEVIEW,
                             TEXT("Tree View"),
@@ -257,10 +265,10 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                             NULL,
                             g_hInst,
                             NULL);
-        /*Create image list*/
+        Create image list
         if((himl=ImageList_Create(16,16,ILC_COLOR32,22,0))==NULL)
             MessageBox(hwnd,"ImageList_Create(64,16,FALSE,4,0)=NULL","Caption",0);
-
+dje
         // Add the open file, closed file, and document bitmaps.
         if((hbmp = LoadBitmap(g_hInst, "IDB_PROPRES"))==NULL)
             MessageBox(hwnd,"hbmp==NULL","Caption",0);
@@ -539,7 +547,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
         hPrev5 = TreeViewInertItem("Реквизиты", hPrev4,enIMAGE::RQSTS,Bmp[1]);
         if(hPrev==NULL) MessageBox(hwnd,"Ошибка Предприятие - реквизиты","Заголовок",0);
-
+        */
 
         break;
         case WM_DESTROY:
@@ -555,8 +563,26 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
 LRESULT CALLBACK ChildWindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    static DataHierarhy& Hierarhy = DataHierarhy::instance();
     switch (message)                  /* handle the messages */
     {
+    case WM_NOTIFY:
+        {
+            LPNMTREEVIEW pnmtv = (LPNMTREEVIEW) lParam;
+            if (pnmtv -> hdr.code == TVN_SELCHANGED)
+            {
+                char szBuffer[25] = "";
+                TVITEMEX tvitem = {0};
+                tvitem.hItem = TreeView_GetSelection(Hierarhy.GetHWND());
+                tvitem.mask = TVIF_TEXT;
+                tvitem.pszText = szBuffer;
+                tvitem.cchTextMax = 25;
+                TreeView_GetItem(Hierarhy.GetHWND(), &tvitem);
+                //MessageBox(hwnd, szBuffer, "", 0);
+                //GetParentX(Hierarhy.GetHWND(),tvitem.hItem);
+            }
+        }
+        break;
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;

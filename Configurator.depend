@@ -1,16 +1,28 @@
 # depslib dependency file v1.0
-1604059124 source:e:\energysaving\configurator\main.cpp
+1604771192 source:e:\energysaving\configurator\main.cpp
 	<tchar.h>
 	<windows.h>
 	<string>
 	<algorithm>
 	<stdlib.h>
 	<commctrl.h>
+	"DataHierarhy.h"
 
 1604043148 e:\energysaving\configurator\menu.h
 
 1604043357 source:e:\energysaving\configurator\res\menu.rc
 	"..\menu.h"
 
-1602782921 source:e:\energysaving\configurator\res\prop.rc
+1604771346 source:e:\energysaving\configurator\res\prop.rc
+
+1604777674 source:e:\energysaving\configurator\datahierarhy.cpp
+	"DataHierarhy.h"
+
+1604777606 e:\energysaving\configurator\datahierarhy.h
+	<windows.h>
+	<commctrl.h>
+	<vector>
+	<numeric>
+	<stdio.h>
+	<string>
 
