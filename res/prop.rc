@@ -1,3 +1,12 @@
 //#include "Resource.h"
+#include "../ConfigPopmenu.h"
 
 IDB_PROPRES BITMAP "res\\properties_hc1.bmp"
+
+PopMenu MENU
+{
+POPUP ""
+    {
+        MENUITEM "Свойства", IDM_CONFIG_PROP
+    }
+}

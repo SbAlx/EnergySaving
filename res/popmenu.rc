@@ -1,0 +1,12 @@
+#include "../ConfigPopmenu.h"
+
+PopMenu MENU
+{
+    POPUP ""
+    {
+        POPUP "&File"
+        {
+            MENUITEM "&New", IDM_CONFIG_PROP
+        }
+    }
+}

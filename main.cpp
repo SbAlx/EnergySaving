@@ -236,7 +236,7 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
                                   (LPSTR) &clientcreate);
 
         mdicreate.szClass = _T("CHILD_WINDOW");
-        mdicreate.szTitle = "Hello";
+        mdicreate.szTitle = "Структура БД";
         mdicreate.hOwner = g_hInst;
         mdicreate.x = CW_USEDEFAULT;
         mdicreate.y = CW_USEDEFAULT;
@@ -568,7 +568,10 @@ LRESULT CALLBACK ChildWindowProcedure (HWND hwnd, UINT message, WPARAM wParam, L
     {
     case WM_NOTIFY:
         {
+            Hierarhy.EventHandling(lParam);
+            /*
             LPNMTREEVIEW pnmtv = (LPNMTREEVIEW) lParam;
+
             if (pnmtv -> hdr.code == TVN_SELCHANGED)
             {
                 char szBuffer[25] = "";
@@ -581,6 +584,7 @@ LRESULT CALLBACK ChildWindowProcedure (HWND hwnd, UINT message, WPARAM wParam, L
                 //MessageBox(hwnd, szBuffer, "", 0);
                 //GetParentX(Hierarhy.GetHWND(),tvitem.hItem);
             }
+            */
         }
         break;
         case WM_DESTROY:

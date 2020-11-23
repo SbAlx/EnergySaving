@@ -26,6 +26,7 @@ public:
         return dh;
     }
     void Set(const HWND&, const HINSTANCE&);
+    void EventHandling(const LPARAM& lParam);
     const HWND& GetHWND();
 private:
     HWND hwndTreeview;//описатель окна
@@ -50,6 +51,8 @@ private:
         LOCALDEPT,
         ORDERS,
         GUIDLINES};
+
+    HMENU hMenu;
     //Временный массив для хранения наименований итемов в ListBox
     std::vector<std::string> ItemNameListBox {  "Предприятие",
                                                 "Филиал",

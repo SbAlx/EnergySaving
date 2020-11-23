@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1604781653 source:e:\energysaving\configurator\main.cpp
+1606125068 source:e:\energysaving\configurator\main.cpp
 	<tchar.h>
 	<windows.h>
 	<string>
@@ -13,16 +13,24 @@
 1604043357 source:e:\energysaving\configurator\res\menu.rc
 	"..\menu.h"
 
-1604781653 source:e:\energysaving\configurator\res\prop.rc
+1606124510 source:e:\energysaving\configurator\res\prop.rc
+	"../ConfigPopmenu.h"
 
-1604781653 source:e:\energysaving\configurator\datahierarhy.cpp
+1606139028 source:e:\energysaving\configurator\datahierarhy.cpp
 	"DataHierarhy.h"
 
-1604781653 e:\energysaving\configurator\datahierarhy.h
+1606136221 e:\energysaving\configurator\datahierarhy.h
 	<windows.h>
 	<commctrl.h>
 	<vector>
 	<numeric>
 	<stdio.h>
 	<string>
+
+1606118067 source:e:\energysaving\configurator\conifgpopmenu.cpp
+
+1606119544 source:e:\energysaving\configurator\res\popmenu.rc
+	"../ConfigPopmenu.h"
+
+1606119476 e:\energysaving\configurator\configpopmenu.h
 

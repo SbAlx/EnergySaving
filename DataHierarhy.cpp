@@ -42,7 +42,8 @@ void DataHierarhy::Set(const HWND& hwndParent, const HINSTANCE& hInst)
         printf("%d\n",BMP[i]);
     }
     #endif // DEBUG
-
+    hMenu = LoadMenu(hInst,"PopMenu");
+    hMenu = GetSubMenu(hMenu, 0);
     //Очистка
     DeleteObject(hbmp);
 }
@@ -56,6 +57,7 @@ void DataHierarhy::DeployStruct()
                                 BMP[Node::COMPANY],
                                 BMP[Node::COMPANY],
                                 Node::COMPANY);
+    //TreeView_SelectItem(hwndTreeview, hRoot);
 
     HTREEITEM htiBranch = TreeViewInertItem(  ItemNameListBox[Node::BRANCH],
                         hRoot,
@@ -192,5 +194,109 @@ void GetParentX(const HWND& hwnd,HTREEITEM hti)
         printf("lparam = %d",tvitem.lParam);
         //MessageBox(hwnd, str.c_str(), "", 0);
         //GetParentX(Hierarhy.GetHWND(),tvitem.hItem);
+    }
+}
+
+void DataHierarhy::EventHandling(const LPARAM& lParam)
+{
+    LPNMHDR pHdr = reinterpret_cast<LPNMHDR>(lParam);
+
+    if(pHdr->hwndFrom != hwndTreeview)
+        return;
+
+    /*Выделение элемента правой кнопкой мыши*/
+    if(pHdr->code == NM_RCLICK)
+    {
+        TVHITTESTINFO ht;
+        POINT pt;
+
+        GetCursorPos(&pt);
+        ScreenToClient(hwndTreeview,&pt);
+
+        ht.pt = pt;
+        TreeView_HitTest(hwndTreeview,&ht);
+
+        TVITEM tvi = {0};
+        char buf[MAX_PATH];
+        tvi.cchTextMax = MAX_PATH;
+        tvi.hItem = ht.hItem;
+        tvi.pszText = buf;
+        tvi.mask = TVIF_TEXT;
+
+        TreeView_GetItem(hwndTreeview,&tvi);
+
+        if(ht.hItem)
+        {
+            TreeView_SelectItem(pHdr->hwndFrom, ht.hItem);
+            ClientToScreen(hwndTreeview,&ht.pt);
+            TrackPopupMenu(hMenu,
+                       0,
+                       ht.pt.x,
+                       ht.pt.y,
+                       0,
+                       hwndTreeview,
+                       NULL);
+        }
+
+        //HTREEITEM hItem = TreeView_GetNextItem(pHdr->hwndFrom, 0, TVGN_DROPHILITE);
+
+        //if(hItem) TreeView_SelectItem(pHdr->hwndFrom, hItem);
+
+        //TreeView_HitTest()
+        /*
+
+        HTREEITEM hItem = TreeView_GetNextItem(pHdr->hwndFrom, 0, TVGN_DROPHILITE);
+
+        if(hItem)
+        {
+            POINT pt;
+            RECT rc;
+
+            TreeView_SelectItem(pHdr->hwndFrom, hItem);
+
+            TreeView_GetItemRect(pHdr->hwndFrom,hItem,&rc,1);
+
+            GetCursorPos(&pt);
+
+            printf("hItem: pt.x = %d, pt.y = %d\n       rc.left = %d, rc.right = %d \n",pt.x,pt.y, rc.left, rc.right);
+
+            if((pt.x<rc.right)&&(pt.x>rc.left))
+            {
+                TrackPopupMenu(hMenu,
+                       0,
+                       pt.x,
+                       pt.y,
+                       0,
+                       hwndTreeview,
+                       NULL);
+            }
+
+        }
+        else
+        {
+            HTREEITEM hItem = TreeView_GetSelection(pHdr->hwndFrom);
+
+            POINT pt;
+            RECT rc;
+
+            TreeView_GetItemRect(pHdr->hwndFrom,hItem,&rc,TRUE);
+
+
+            GetCursorPos(&pt);
+
+            if((pt.x<rc.right)&&(pt.x>rc.left))
+            {
+                TrackPopupMenu(hMenu,
+                       0,
+                       pt.x,
+                       pt.y,
+                       0,
+                       hwndTreeview,
+                       NULL);
+            }
+            printf("!hItem: pt.x = %d, pt.y = %d\n        rc.left = %d, rc.right = %d \n",pt.x,pt.y, rc.left, rc.right);
+
+        }
+        */
     }
 }
